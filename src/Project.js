@@ -925,7 +925,8 @@ export async function startReactNativeServerAsync(
   await stopReactNativeServerAsync(projectRoot);
   await Watchman.addToPathAsync(); // Attempt to fix watchman if it's hanging
   await Watchman.unblockAndGetVersionAsync(projectRoot);
-  let packagerPort = await _getFreePortAsync(19001); // Create packager options
+  let expRc = yield (_ProjectUtils || _load_ProjectUtils()).readExpRcAsync(projectRoot);
+  let packagerPort = expRc.packagerPort ? expRc.packagerPort : yield _getFreePortAsync(19001); // Create packager options
   let packagerOpts = {
     port: packagerPort,
     projectRoots: projectRoot,
